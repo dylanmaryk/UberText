@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>UberText</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/styles.css" rel="stylesheet" media="screen">
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			var request;
+
+			$(document).ready(function() {
+				$("#fieldAuthCode").val(getURLParameter("code"));
+
+				jQuery.validator.addMethod("validMobile", function(phone_number, element) {
+					matchUK = this.optional(element) || phone_number.length > 9 && phone_number.match(/^(\+447(4|5|6|7|8|9){1}\d{2}\s?\d{6})$/);
+					phone_number = phone_number.replace(/\s+/g, "");
+					matchUS = this.optional(element) || phone_number.length > 9 && phone_number.match(/^(\+1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
+
+					return matchUK || matchUS;
+				}, "Please specify a valid UK or US mobile number (include +44 or +1).");
+
+				$("#formSend").validate({
+					rules: {
+						fieldNumber: {
+							required: true,
+							validMobile: true
+						}
+					},
+					messages: {
+						fieldNumber: {
+							required: "Please specify a valid UK or US mobile number (include +44 or +1)."
+						}
+					},
+					submitHandler: function(e) {
+						if (request)
+							request.abort();
+
+						var $form = $("#formSend");
+						var $inputs = $form.find("input");
+						var serializedData = $form.serialize();
+
+						request = $.ajax({
+							url: "form.php",
+							type: "post",
+							data: serializedData,
+							success: function(response) {
+								$("#fieldNumber").val("");
+
+								alert("You can now request Uber cars from this number.");
+							}
+						});
+					}
+				});
+			});
+
+			function getURLParameter(name) {
+				return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<h1><center>Step 2: Enter your mobile number</center></h1>
+			<hr>
+			<form id="formSend" method="POST">
+				<div class="form-group">
+					<div class="col-md-6 col-md-offset-2">
+						<input name="fieldNumber" class="form-control" id="fieldNumber" style="margin-top: 5px; margin-bottom: 5px;" placeholder="Phone number including +44 or +1" />
+						<input name="fieldAuthCode" id="fieldAuthCode" type="hidden" />
+					</div>
+					<div class="col-md-2">
+						<input type="submit" class="btn btn-default" id="btnSend" style="margin-top: 5px; margin-bottom: 5px;" value="Sign me up!" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

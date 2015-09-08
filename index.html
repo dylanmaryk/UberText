@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>UberText</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/styles.css" rel="stylesheet" media="screen">
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<h1><center>Step 1: Login to Uber</center></h1>
+			<hr>
+			<h2><center><a href="https://login.uber.com/oauth/authorize?response_type=code&client_id=YOUR_CLIENT_ID&scope=request">Login to Uber</a></center></h2> <!-- Add your own Uber client ID -->
+			<br>
+			<ol>
+				<li>Login to Uber</li>
+				<li>Enter your mobile number</li>
+				<li>Text <b>YOUR_PHONE_NUMBER</b> from the number you entered...</li>  <!-- Add your own Twilio phone number -->
+				<ul>
+					<li>For a list of Uber products available at the start address: <b>Products</b>/<b>START ADDRESS</b></li>
+					<li>To request an Uber product from a start address to an end address: <b>PRODUCT NAME</b>/<b>START ADDRESS</b>/<b>END ADDRESS</b>
+				</ul>
+				<li>You will receive a text with, based on the text you sent, either a list of Uber products or confirmation of your Uber request. If you requested an Uber product, you will receive a text when your request has been accepted.</li>
+			</ol>
+			<br>
+			<p>To make this suitable for production, you would need to disable the use of the sandbox and no longer use the "/v1/sandbox/requests/{request_id}" endpoint to manually modify the status of a request. For now, most functionality is operational and the hack is suitable for demo purposes. Requesting an Uber product currently results in receiving updates via text with the sandbox's demo data for the "processing" and "accepted" request statuses.</p>
+		</container>
+	</body>
+</html>
